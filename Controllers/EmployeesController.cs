@@ -9,7 +9,6 @@ namespace Cortracker360_Accurate_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    // Only users in the Admin or Manager roles can access these endpoints.
     [Authorize(Roles = "Admin,Manager")]
     public class EmployeesController : ControllerBase
     {
@@ -21,6 +20,7 @@ namespace Cortracker360_Accurate_API.Controllers
         }
 
         // GET: api/Employees
+        // Retrieves all employees.
         [HttpGet]
         public async Task<IActionResult> GetEmployees()
         {
@@ -29,16 +29,19 @@ namespace Cortracker360_Accurate_API.Controllers
         }
 
         // GET: api/Employees/{id}
+        // Retrieves an employee by id.
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEmployee(int id)
         {
             var employee = await _context.Employees.FindAsync(id);
             if (employee == null)
                 return NotFound();
+
             return Ok(employee);
         }
 
         // POST: api/Employees
+        // Creates a new employee record.
         [HttpPost]
         public async Task<IActionResult> CreateEmployee([FromBody] Employee employee)
         {
@@ -51,11 +54,12 @@ namespace Cortracker360_Accurate_API.Controllers
         }
 
         // PUT: api/Employees/{id}
+        // Updates an existing employee record.
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEmployee(int id, [FromBody] Employee updatedEmployee)
         {
             if (id != updatedEmployee.Id)
-                return BadRequest("Employee ID mismatch");
+                return BadRequest("Employee ID mismatch.");
 
             _context.Entry(updatedEmployee).State = EntityState.Modified;
             try
@@ -64,7 +68,7 @@ namespace Cortracker360_Accurate_API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!EmployeeExists(id))
+                if (!_context.Employees.Any(e => e.Id == id))
                     return NotFound();
                 else
                     throw;
@@ -74,6 +78,7 @@ namespace Cortracker360_Accurate_API.Controllers
         }
 
         // DELETE: api/Employees/{id}
+        // Deletes an employee record.
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmployee(int id)
         {
@@ -84,11 +89,6 @@ namespace Cortracker360_Accurate_API.Controllers
             _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
             return Ok("Employee deleted successfully.");
-        }
-
-        private bool EmployeeExists(int id)
-        {
-            return _context.Employees.Any(e => e.Id == id);
         }
     }
 }

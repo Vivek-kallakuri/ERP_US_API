@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Cortracker360_Accurate_API.Controllers
 {
-    // NOTE: Authentication and authorization are intentionally disabled for local development.
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class UsersController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -19,17 +20,17 @@ namespace Cortracker360_Accurate_API.Controllers
         }
 
         // GET: api/Users
-        // Returns a list of all users along with their assigned roles.
+        // Returns a list of all users with their assigned roles.
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userManager.Users.ToListAsync();
-            var userRolesList = await Task.WhenAll(users.Select(async user => new
+            var usersWithRoles = await Task.WhenAll(users.Select(async user => new
             {
                 Email = user.Email,
                 Roles = await _userManager.GetRolesAsync(user)
             }));
-            return Ok(userRolesList);
+            return Ok(usersWithRoles);
         }
 
         // DELETE: api/Users?email=user@example.com

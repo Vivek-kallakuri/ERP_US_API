@@ -30,6 +30,8 @@ namespace Cortracker360_Accurate_API.Controllers
             _configuration = configuration;
         }
 
+        // POST: api/Auth/signup
+        // Creates a new user with the default "User" role.
         [HttpPost("signup")]
         public async Task<IActionResult> Signup([FromBody] SignupModel model)
         {
@@ -49,6 +51,8 @@ namespace Cortracker360_Accurate_API.Controllers
             return BadRequest(result.Errors);
         }
 
+        // POST: api/Auth/login
+        // Authenticates a user and returns a JWT.
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
@@ -57,11 +61,11 @@ namespace Cortracker360_Accurate_API.Controllers
 
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
-                return Unauthorized("Invalid Email or Password");
+                return Unauthorized("Invalid Email or Password.");
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
             if (!result.Succeeded)
-                return Unauthorized("Invalid Email or Password");
+                return Unauthorized("Invalid Email or Password.");
 
             var token = await GenerateJwtToken(user);
             return Ok(new { Token = token });
@@ -73,22 +77,21 @@ namespace Cortracker360_Accurate_API.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
 
             var userRoles = await _userManager.GetRolesAsync(user);
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
 
-            var roleClaims = new List<Claim>();
             foreach (var role in userRoles)
             {
-                roleClaims.Add(new Claim(ClaimTypes.Role, role));
+                claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(claims.Concat(roleClaims)),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtSettings["ExpireMinutes"])),
                 Issuer = jwtSettings["Issuer"],
                 Audience = jwtSettings["Audience"],

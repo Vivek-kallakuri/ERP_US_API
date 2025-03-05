@@ -8,45 +8,43 @@ namespace Cortracker360_Accurate_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Manager")]
     public class RoleController : ControllerBase
     {
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public RoleController(UserManager<IdentityUser> userManager)
+        public RoleController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
         {
+            _roleManager = roleManager;
             _userManager = userManager;
         }
 
-        private readonly RoleManager<IdentityRole> _roleManager;
-        public RoleController(RoleManager<IdentityRole> roleManager)
-        {
-            _roleManager = roleManager;
-        }
-
+        // GET: api/Role
+        // Returns all available roles.
         [HttpGet]
         public IActionResult GetRoles()
         {
-            var roles = _roleManager.Roles.Select(r => new { r.Id, r.Name }).ToList();
+            var roles = _roleManager.Roles
+                .Select(r => new { r.Id, r.Name })
+                .ToList();
             return Ok(roles);
         }
 
-        // Endpoint to update a user's role.
+        // POST: api/Role/update
+        // Updates a user's role by removing all current roles and assigning a new one.
         [HttpPost("update")]
         public async Task<IActionResult> UpdateUserRole([FromBody] UpdateRoleModel model)
         {
             if (string.IsNullOrWhiteSpace(model.Email) || string.IsNullOrWhiteSpace(model.NewRole))
                 return BadRequest("Email and NewRole are required.");
 
-            // Find the user by email.
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
                 return NotFound("User not found.");
 
-            // Get current roles of the user.
-            var currentRoles = await _userManager.GetRolesAsync(user);
-
             // Remove all current roles.
+            var currentRoles = await _userManager.GetRolesAsync(user);
             var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
             if (!removeResult.Succeeded)
                 return StatusCode(500, "Error removing user roles.");
