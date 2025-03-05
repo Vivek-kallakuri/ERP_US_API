@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35818.85 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cortracker360_Accurate_API", "Cortracker360_Accurate_API.csproj", "{F39C3A87-3860-4431-AB2F-497FB9207DBD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F39C3A87-3860-4431-AB2F-497FB9207DBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F39C3A87-3860-4431-AB2F-497FB9207DBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F39C3A87-3860-4431-AB2F-497FB9207DBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F39C3A87-3860-4431-AB2F-497FB9207DBD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8EDB5DCE-9971-4DC3-8DDB-7D99CC2EB0D6}
+	EndGlobalSection
+EndGlobal
