@@ -1,0 +1,49 @@
+[
+  {
+    "ContainingType": "PDFUploader.Controllers.FileMetadatumsController",
+    "Method": "DownloadFile",
+    "RelativePath": "download/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PDFUploader.Controllers.FileMetadatumsController",
+    "Method": "GetAllFiles",
+    "RelativePath": "download/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PDFUploader.Controllers.FileMetadatumsController",
+    "Method": "UploadFile",
+    "RelativePath": "upload",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "uploadedBy",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
