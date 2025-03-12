@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Time Sheet API.props" />
+</Project>
